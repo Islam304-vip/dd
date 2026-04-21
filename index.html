@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Magic 1-15: Enhanced Version</title>
+    <style>
+        /* БАЗОВЫЕ НАСТРОЙКИ */
+        :root {
+            --primary: #6366f1;
+            --secondary: #10b981;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            scroll-behavior: smooth;
+        }
+
+        /* 13. ПРЕЛОАДЕР (Улучшенная видимость) */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            /* Увеличили время до 3 секунд, чтобы рассмотреть */
+            animation: fadeOut 0.8s forwards 3s; 
+        }
+
+        #preloader p {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--primary);
+            /* Эффект мигания текста */
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0.5; } }
+
+        /* 6. ЛОАДЕР (Круг) */
+        .loader-circle {
+            width: 70px;
+            height: 70px;
+            border: 6px solid #334155;
+            border-top: 6px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+        /* 12. ПАРАЛЛАКС (Шапка) */
+        .parallax-hero {
+            height: 500px;
+            background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1500');
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-bottom: 5px solid var(--primary);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* 7. АНИМАЦИЯ ПОЯВЛЕНИЯ КАРТОЧЕК */
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 220px;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: revealCard 0.8s ease forwards;
+        }
+
+        /* Очередность появления с учетом долгого прелоадера */
+        .card:nth-child(1) { animation-delay: 3.2s; }
+        .card:nth-child(2) { animation-delay: 3.4s; }
+        .card:nth-child(3) { animation-delay: 3.6s; }
+        .card:nth-child(n+4) { animation-delay: 3.8s; }
+
+        @keyframes revealCard {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h3 { color: #94a3b8; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 20px; }
+
+        /* 1. ПЛАВНЫЙ ЦВЕТ */
+        .btn-color {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.4s ease;
+        }
+        .btn-color:hover { background: var(--secondary); }
+
+        /* 2. УВЕЛИЧЕНИЕ */
+        .zoom-box {
+            width: 80px; height: 80px;
+            background: #f59e0b; border-radius: 12px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .zoom-box:hover { transform: scale(1.2); }
+
+        /* 3. ПОЯВЛЕНИЕ ТЕКСТА */
+        .reveal-box:hover .hidden-txt { opacity: 1; transform: translateY(0); }
+        .hidden-txt { 
+            opacity: 0; transform: translateY(10px); 
+            transition: 0.4s; color: var(--secondary); font-weight: bold; 
+        }
+
+        /* 4. ДВИЖЕНИЕ */
+        .track { width: 100%; height: 2px; background: #334155; position: relative; margin: 20px 0; }
+        .square {
+            width: 20px; height: 20px; background: #ef4444;
+            position: absolute; top: -10px;
+            animation: slide 2s infinite alternate ease-in-out;
+        }
+        @keyframes slide { from { left: 0; } to { left: 90%; } }
+
+        /* 5. ПУЛЬСАЦИЯ */
+        .pulse {
+            width: 60px; height: 60px; background: #8b5cf6; border-radius: 50%;
+            animation: pulse-ring 1.5s infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(139, 92, 246, 0); }
+            100% { transform: scale(0.95); }
+        }
+
+        /* 8. МЕНЮ (Underline) */
+        .nav-link {
+            text-decoration: none; color: white; position: relative; font-size: 1.2rem;
+        }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -5px; left: 0;
+            width: 0; height: 2px; background: var(--secondary); transition: 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* 9. RIPPLE ЭФФЕКТ */
+        .ripple {
+            position: relative; overflow: hidden;
+            padding: 15px 30px; background: #ec4899; border: none; color: white; cursor: pointer;
+        }
+        .ripple::before {
+            content: ""; position: absolute; background: rgba(255,255,255,0.4);
+            width: 100px; height: 100px; border-radius: 50%;
+            top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); opacity: 0;
+        }
+        .ripple:active::before { animation: click-ripple 0.5s ease-out; }
+        @keyframes click-ripple { from { transform: translate(-50%, -50%) scale(0); opacity: 1; } to { transform: translate(-50%, -50%) scale(4); opacity: 0; } }
+
+        /* 10. СЛАЙДЕР С ФОТО */
+        .slider {
+            width: 100%; height: 150px; overflow: hidden; border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .slide-track {
+            display: flex; width: 300%; animation: slideShow 9s infinite;
+        }
+        .slide-item { 
+            width: 100%; height: 150px; 
+            background-size: cover; 
+            background-position: center;
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: bold; text-shadow: 2px 2px 4px black;
+        }
+        /* Добавляем фото из интернета */
+        .img1 { background-image: url('https://picsum.photos/400/150?random=11'); }
+        .img2 { background-image: url('https://picsum.photos/400/150?random=12'); }
+        .img3 { background-image: url('https://picsum.photos/400/150?random=13'); }
+
+        @keyframes slideShow { 
+            0%, 25% { transform: translateX(0); } 
+            33%, 58% { transform: translateX(-33.33%); } 
+            66%, 91% { transform: translateX(-66.66%); } 
+        }
+
+        /* 11. БУРГЕР */
+        .burger-lab { cursor: pointer; padding: 10px; }
+        .burger-lab span { display: block; width: 30px; height: 3px; background: white; margin: 6px 0; transition: 0.3s; }
+        #check { display: none; }
+        #check:checked ~ span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+        #check:checked ~ span:nth-child(2) { opacity: 0; }
+        #check:checked ~ span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+        /* 14. HOVER ИЗОБРАЖЕНИЯ */
+        .img-wrap {
+            width: 100%; height: 150px; position: relative; overflow: hidden; border-radius: 10px;
+        }
+        .img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .img-overlay {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.7);
+            display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.5s;
+        }
+        .img-wrap:hover img { transform: scale(1.2); }
+        .img-wrap:hover .img-overlay { opacity: 1; }
+
+        /* ДОПОЛНИТЕЛЬНОЕ МЕСТО ДЛЯ СКРОЛЛА */
+        .footer-spacer { height: 800px; display: flex; justify-content: center; align-items: flex-start; padding-top: 100px; background: linear-gradient(var(--bg), #000); }
+
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader-circle"></div>
+        <p>Инициализация системы...</p>
+    </div>
+
+    <header class="parallax-hero">
+        <h1 style="font-size: 3.5rem; margin: 0;">CSS MAGIC 1-15</h1>
+        <p style="font-size: 1.2rem; opacity: 0.8;">Листай вниз, чтобы увидеть всё!</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="card">
+            <h3>1. Цвет (Transition)</h3>
+            <button class="btn-color">Hover me</button>
+        </div>
+
+        <div class="card">
+            <h3>2. Увеличение (Scale)</h3>
+            <div class="zoom-box"></div>
+        </div>
+
+        <div class="card">
+            <h3>3. Появление текста</h3>
+            <div class="reveal-box">
+                <p>Наведи сюда</p>
+                <p class="hidden-txt">Я появился! (Opacity)</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>4. Keyframes Движение</h3>
+            <div class="track"><div class="square"></div></div>
+        </div>
+
+        <div class="card">
+            <h3>5. Пульсация</h3>
+            <div class="pulse"></div>
+        </div>
+
+        <div class="card">
+            <h3>6. Loader (3 точки)</h3>
+            <style>
+                .dot { width: 10px; height: 10px; background: var(--primary); border-radius: 50%; animation: bounce 0.5s infinite alternate; }
+                .dot:nth-child(2) { animation-delay: 0.1s; }
+                .dot:nth-child(3) { animation-delay: 0.2s; }
+                @keyframes bounce { to { transform: translateY(-10px); } }
+            </style>
+            <div style="display: flex; gap: 8px;">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>8. Underline анимация</h3>
+            <a href="#" class="nav-link">Главная страница</a>
+        </div>
+
+        <div class="card">
+            <h3>9. Ripple (Кликни!)</h3>
+            <button class="ripple">Нажми на меня</button>
+        </div>
+
+        <div class="card">
+            <h3>10. Фото-Слайдер</h3>
+            <div class="slider">
+                <div class="slide-track">
+                    <div class="slide-item img1">ПЕЙЗАЖ 1</div>
+                    <div class="slide-item img2">ПЕЙЗАЖ 2</div>
+                    <div class="slide-item img3">ПЕЙЗАЖ 3</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>11. Бургер (Кликни!)</h3>
+            <label class="burger-lab">
+                <input type="checkbox" id="check">
+                <span></span><span></span><span></span>
+            </label>
+        </div>
+
+        <div class="card">
+            <h3>14. Image Hover</h3>
+            <div class="img-wrap">
+                <img src="https://picsum.photos/400/300?random=1" alt="img">
+                <div class="img-overlay">ZOOM EFFECT</div>
+            </div>
+        </div>
+
+        <div class="card" style="background: var(--primary);">
+            <h3 style="color: white;">15. Результат</h3>
+            <p>Все 15 фишек CSS в одном месте!</p>
+        </div>
+
+    </div>
+
+    <div class="footer-spacer">
+        <div style="text-align: center;">
+            <h2>Это был параллакс (№12)</h2>
+            <p>Фон в самом верху двигался медленнее контента.</p>
+            <button onclick="location.reload()" class="btn-color" style="margin-top: 20px;">Запустить заново (п. 7 и 13)</button>
+        </div>
+    </div>
+
+</body>
+</html>
